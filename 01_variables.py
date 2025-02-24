@@ -47,5 +47,29 @@ Take radius as user input and calculate the area.
 Use the built-in input function to get first name, last name, country and age from a user and store the value to their corresponding variable names
 Run help('keywords') in Python shell or in your file to check for the Python reserved words or keywords
 '''
+from math import pi as PI_VALUE
+
 print(type(first_name))
+print(type(year))
 print(type(is_married))
+print(len(first_name))
+print(len(last_name))
+
+num_one = 5
+num_two = 4
+total = num_one + num_two
+diff = num_two - num_one
+product = num_one * num_two
+division = num_one / num_two
+print(f"The total is {total}, the difference is {diff}, the product is {product} and the division is {division}")
+remainder = num_two % num_one
+exp = num_one ** num_two
+floor_division = num_one // num_two
+print(f'The remainder is {remainder}, the exponential is {exp} and the floor division is {floor_division}')
+radius = 30
+area_of_circle = PI_VALUE * (radius**2)
+circumference = 2 * radius * PI_VALUE
+print(f"The area of the circle is {area_of_circle} and the circumference is {circumference}")
+radius_input = int(input("Enter the radius: "))
+area_of_circle = PI_VALUE * (radius_input ** 2)
+print(f"Area of your circle is {area_of_circle}")
