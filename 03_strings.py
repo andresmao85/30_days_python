@@ -134,3 +134,19 @@ radius = 10
 area = 3.14 * radius ** 2
 print('The area of a circle with radius {} is {:.0f} meters square.'.format(radius, area))
 
+'''
+Make the following using string formatting methods:
+8 + 6 = 14
+8 - 6 = 2
+8 * 6 = 48
+8 / 6 = 1.33
+8 % 6 = 2
+8 // 6 = 1
+8 ** 6 = 262144
+'''
+print(f"8 + 6 = {8 + 6}")
+print(f"8 - 6 = {8 - 6}")
+print(f"8 * 6 = {8 * 6}")
+print(f"8 / 6 = {8 / 6:.2f}")
+print(f"8 // 6 = {8 // 6}")
+print(f"8 ** 6 = {8 ** 6}")
