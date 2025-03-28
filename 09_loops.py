@@ -113,3 +113,32 @@ for number in range(101):
     else:
         sum_of_odds += number
 print(f"The sum of all evens is {sum_of_evens}. And the sum of all odds is {sum_of_odds}.")
+
+#  reverse the order using loop.
+# this method modifies the original lists as it deletes the elements on it
+fruits = ['banana', 'orange', 'mango', 'lemon']
+reversed_list = []
+while len(fruits) > 0:
+    fruit = fruits.pop()
+    reversed_list.append(fruit)
+print(reversed_list)
+
+# this method does not modify the original list
+fruits = ['banana', 'orange', 'mango', 'lemon']
+reversed_list_2 = []
+for fruit in reversed(fruits):
+    reversed_list_2.append(fruit)
+print(reversed_list_2)
+
+# Go to the data folder and use the countries.py file. Loop through the countries and extract all the countries containing the word land.
+import countries
+countries_with_land = []
+for country in countries.countries_list:
+    if "land" in country:
+        countries_with_land.append(country)
+print(countries_with_land)
+
+# Go to the data folder and use the countries_data.py file.
+# What are the total number of languages in the data
+# Find the ten most spoken languages from the data
+# Find the 10 most populated countries in the world
