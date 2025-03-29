@@ -136,9 +136,23 @@ countries_with_land = []
 for country in countries.countries_list:
     if "land" in country:
         countries_with_land.append(country)
-print(countries_with_land)
+print(f"Countries that contain \"land\": {countries_with_land}")
 
 # Go to the data folder and use the countries_data.py file.
 # What are the total number of languages in the data
+# duplicated values
+number_of_languages = 0
+for country in countries.countries_data:
+    # print(country["name"])
+    number_of_languages += len(country["languages"])
+print(f"- Number of total languages: {number_of_languages}")
+
+# unique values
+total_languages = []
+for country in countries.countries_data:
+    total_languages.extend(country["languages"])
+unique_languages = set(total_languages)
+print(f"- Number of unique languages: {len(unique_languages)}")
+
 # Find the ten most spoken languages from the data
 # Find the 10 most populated countries in the world
