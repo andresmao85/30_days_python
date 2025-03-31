@@ -143,7 +143,6 @@ print(f"Countries that contain \"land\": {countries_with_land}")
 # duplicated values
 number_of_languages = 0
 for country in countries.countries_data:
-    # print(country["name"])
     number_of_languages += len(country["languages"])
 print(f"- Number of total languages: {number_of_languages}")
 
@@ -154,5 +153,71 @@ for country in countries.countries_data:
 unique_languages = set(total_languages)
 print(f"- Number of unique languages: {len(unique_languages)}")
 
-# Find the ten most spoken languages from the data
+# >>>>>>>>>>>>>>>>> Find the ten most spoken languages from the data
+spoken_lang = {}
+for lang in unique_languages:
+    spoken_lang[lang] = total_languages.count(lang)
+
+sorted_lang = sorted(spoken_lang.items(), key=lambda kv: kv[1], reverse=True) # creates a list of tuples
+# print(sorted_lang[0:10])
+ten_more_spoken = sorted_lang[0:10]
+final_list = []
+for couple in ten_more_spoken:
+    final_list.append(couple[0])
+# print(final_list)
+print("The ten most spoken languages are: ", end="")
+for j in (final_list):
+        print(j, end=", ")
+
+print("\nOnly loop version\nTop 10 most spoken languages:")
+# >>>>>>>>>>>>>>>>>> Only loop version
+# Step 1: Count the occurrences of each language
+language_counts = {}
+
+for country in countries.countries_data:
+    for language in country["languages"]:
+        if language in language_counts:
+            language_counts[language] += 1
+        else:
+            language_counts[language] = 1
+
+# Step 2: Sort languages by frequency (without using sorted())
+sorted_languages = []
+for lang, count in language_counts.items():
+    inserted = False
+    for i in range(len(sorted_languages)):
+        if count > sorted_languages[i][1]:  # Insert in descending order
+            sorted_languages.insert(i, (lang, count))
+            inserted = True
+            break
+    if not inserted:
+        sorted_languages.append((lang, count))
+
+# Step 3: Get the top 10 most spoken languages
+top_10_languages = sorted_languages[:10]
+
+# Step 4: Print the result
+for lang, count in top_10_languages:
+    print(f"{lang}: {count}")
+# >>>>>>>>>>>>>>>>>>>>>>
+
 # Find the 10 most populated countries in the world
+population_counts = {}
+for country in countries.countries_data:
+    population_counts[country["name"]] = country["population"]
+
+sorted_population = []
+for country, population_number in population_counts.items():
+    insterted = False
+    for j in range(len(sorted_population)):
+        if population_number > sorted_population[j][1]:
+            sorted_population.insert(j, (country, population_number))
+            inserted = True
+            break
+    if not inserted:
+        sorted_population.append((country, population_number))
+
+top_10_populated = sorted_population[:10]
+print("10 most populated countries in the world:")
+for country, population_number in top_10_populated:
+    print(f"{country}: {population_number:,}")
