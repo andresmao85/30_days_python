@@ -203,3 +203,106 @@ def calculate_median(list):
 print(calculate_median([7, 3, 1, 4]))
 print(calculate_median([7,3,5,6,9]))
 
+def calculate_mode(list):
+    frequency = {}
+    for number in list:
+        if number in frequency.keys():
+            frequency[number] += 1
+        else:
+            frequency[number] = 1
+    max_count = max(frequency.values())
+    
+    modes = [num for num, count in frequency.items() if count == max_count]
+
+    return modes if len(modes) > 1 else modes[0]
+
+print(calculate_mode([7, 3, 1, 4, 7, 3, 7])) #7
+print(calculate_mode([7, 3, 1, 4, 7, 3, 7, 3])) #3 
+print(calculate_mode([7, 3, 1, 4])) #7, 3, 1, 4
+
+def calculate_range(list):
+    return max(list) - min(list)
+print(calculate_range([7, 3, 1, 4, 7, 3, 7]))
+
+def calculate_variance(list):
+    sum_of_elements = 0
+    for m in list:
+        sum_of_elements += m
+    mean = sum_of_elements / len(list)
+
+    sqr_deviation = 0
+    for x in list:
+        sqr_deviation += (x - mean)**2
+    
+    sample_variance = sqr_deviation / (len(list) - 1)
+
+    return sample_variance
+
+print(calculate_variance([2, 4, 4, 4, 5, 5, 7, 9]))
+
+
+def calculate_std(list):
+    sum_of_elements = 0
+    for y in list:
+        sum_of_elements += y
+    mean = sum_of_elements / len(list)
+
+    sqr_difference = 0
+    for n in list:
+        sqr_difference += (n - mean) ** 2
+    
+    sample_variance = sqr_difference / (len(list) - 1)
+
+    std = sample_variance ** 0.5
+
+    return f"{std:.2f}"
+print(calculate_std([2, 4, 4, 4, 5, 5, 7, 9]))
+
+
+
+# Write a function called is_prime, which checks if a number is prime.
+# V1 with issues
+def is_prime(number):
+    divider = 2
+    prime = True
+    while divider < number / 2:
+        if number % divider != 0:
+            divider += 1
+        else:
+            prime = False
+            break
+    return prime
+print(is_prime(2))
+        
+# V2 corrected
+def is_prime_2(num):
+    if num < 2:
+        return False
+    
+    if num == 2:
+        return True
+
+    if num % 2 == 0: 
+        return False
+    
+    divisor = 3
+    while divisor * 3 <= num:
+        if num % divisor == 0:
+            return False
+        divisor += 2
+    
+    return True
+print(is_prime_2(1))   # False
+print(is_prime_2(2))   # True
+print(is_prime_2(3))   # True
+print(is_prime_2(4))   # False
+print(is_prime_2(17))  # True
+print(is_prime_2(19))  # True
+print(is_prime_2(25))  # False
+
+# Write a functions which checks if all items are unique in the list.
+# Write a function which checks if all the items of the list are of the same data type.
+# Write a function which check if provided variable is a valid python variable
+# Go to the data folder and access the countries-data.py file.
+# Create a function called the most_spoken_languages in the world. It should return 10 or 20 most spoken languages in the world in descending order
+# Create a function called the most_populated_countries. It should return 10 or 20 most populated countries in descending order.
