@@ -301,7 +301,39 @@ print(is_prime_2(19))  # True
 print(is_prime_2(25))  # False
 
 # Write a functions which checks if all items are unique in the list.
+# V1
+def check_unique(items_list):
+    items_set = set(items_list)
+    if len(items_set) == len(items_list):
+        return True
+    else:
+        return False
+
+# V2
+def check_unique(items_list):
+    return len(set(items_list)) == len(items_list)
+
+# V3
+def check_unique(items_list):
+    seen = set()
+    for item in items_list:
+        if item in seen:
+            return False
+        seen.add(item)
+
+print(check_unique(fruits))
+print(check_unique([2, 4, 4, 4, 5, 5, 7, 9]))
+
+
 # Write a function which checks if all the items of the list are of the same data type.
+def check_type(items_list):
+    for item in items_list:
+        if type(item) == type(items_list[0]):
+            return False
+    return True
+    
+print(check_type(["a", 2]))
+
 # Write a function which check if provided variable is a valid python variable
 # Go to the data folder and access the countries-data.py file.
 # Create a function called the most_spoken_languages in the world. It should return 10 or 20 most spoken languages in the world in descending order
