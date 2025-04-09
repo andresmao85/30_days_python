@@ -335,6 +335,87 @@ def check_type(items_list):
 print(check_type(["a", 2]))
 
 # Write a function which check if provided variable is a valid python variable
+
+# V1
+print("Check variable name:\n")
+def check_variable_name(variable_name):
+    if variable_name[0] == "_" and variable_name[1:].isalnum() or "_" in variable_name[1:]:
+        return True
+    
+    if variable_name[0].isnumeric() or not variable_name[0].isalpha() or not variable_name[1:].isalnum():
+        return False
+    
+    if variable_name.isalnum():
+        return True
+
+
+# V2
+python_keywords = {
+    'False', 'None', 'True', 'and', 'as', 'assert', 'break', 'class', 'continue',
+    'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global',
+    'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise',
+    'return', 'try', 'while', 'with', 'yield'
+}
+
+def check_variable_name(name):
+    return name.isidentifier() and name not in python_keywords
+
 # Go to the data folder and access the countries-data.py file.
 # Create a function called the most_spoken_languages in the world. It should return 10 or 20 most spoken languages in the world in descending order
+import countries
+def most_spoken_languages(countries_info):
+    language_counts = {}
+    
+    for country in countries_info:
+        for language in country["languages"]:
+            if language in language_counts:
+                language_counts[language] += 1
+            else:
+                language_counts[language] = 1
+    
+    sorted_languages = []
+    for lang, count in language_counts.items():
+        inserted = False
+        for i in range(len(sorted_languages)):
+            if count > sorted_languages[i][1]:
+                sorted_languages.insert(i, (lang, count))
+                inserted = True
+                break
+        if not inserted:
+            sorted_languages.append((lang, count))
+    
+    top_20_languages = sorted_languages[:20]
+
+    # for lang, count in top_20_languages:
+    #     print(f"{lang}: {count}")
+    return sorted_languages[:20]
+
+# most_spoken_languages(countries.countries_data)
+
+for lang, count in most_spoken_languages(countries.countries_data):
+    print(f"{lang}: {count}")
+
+
 # Create a function called the most_populated_countries. It should return 10 or 20 most populated countries in descending order.
+def most_populated_countries(countries_info):
+    population_counts = {}
+    for country in countries_info:
+        population_counts[country["name"]] = country["population"]
+
+    sorted_population = []
+    for country, population_number in population_counts.items():
+        inserted = False
+        for j in range(len(sorted_population)):
+            if population_number > sorted_population[j][1]:
+                sorted_population.insert(j, (country, population_number))
+                inserted = True
+                break
+        if not inserted:
+            sorted_population.append((country, population_number))
+
+    top_10_populated = sorted_population[:20]
+    print("20 most populated countries in the world:")
+    for country, population_number in top_10_populated:
+        print(f"{country}: {population_number:,}")
+
+most_populated_countries(countries.countries_data)

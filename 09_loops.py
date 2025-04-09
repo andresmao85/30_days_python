@@ -208,7 +208,7 @@ for country in countries.countries_data:
 
 sorted_population = []
 for country, population_number in population_counts.items():
-    insterted = False
+    inserted = False
     for j in range(len(sorted_population)):
         if population_number > sorted_population[j][1]:
             sorted_population.insert(j, (country, population_number))
