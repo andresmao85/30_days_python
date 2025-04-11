@@ -237,8 +237,9 @@ def calculate_variance(list):
     sample_variance = sqr_deviation / (len(list) - 1)
 
     return sample_variance
-
+print("VARIANCE")
 print(calculate_variance([2, 4, 4, 4, 5, 5, 7, 9]))
+print(calculate_variance([31, 26, 34, 37, 27, 26, 32, 32, 26, 27, 27, 24, 32, 33, 27, 25, 26, 38, 37, 31, 34, 24, 33, 29, 26]))
 
 
 def calculate_std(list):
