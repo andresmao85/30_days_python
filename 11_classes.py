@@ -110,3 +110,46 @@ print('Median: ', data.median())
 print('Mode: ', data.mode()) # {'mode': 26, 'count': 5}
 print('Standard Deviation: ', data.std()) # 4.2
 print('Variance: ', data.var()) # 18.2
+
+# Create a class called PersonAccount. It has firstname, lastname, incomes, expenses properties and it has total_income, total_expense, account_info, add_income, add_expense and account_balance methods. Incomes is a set of incomes and its description. The same goes for expenses.
+
+class PersonAccount:
+    def __init__(self, firstname, lastname, incomes, expenses):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.incomes = set()
+        self.expenses = set()
+        
+    def get_name (self):
+        print(f"Full name: {self.firstname} {self.lastname}")
+    
+    def add_income (self, concept, amount):
+        income = (concept, amount)
+        self.incomes.add(income)
+        print(f"New income added: {concept}")
+
+    def total_income (self): 
+        total_income = 0
+        for single_income in self.incomes:
+            concept, amount = single_income
+            total_income +=  amount
+        
+        return f"Total income: {total_income}"
+    
+    def total_expense (self): 
+        pass
+
+    def account_info (self):
+        pass
+
+    def add_expense (self):
+        pass
+
+    def account_balance (self):
+        pass
+
+my_person = PersonAccount("John", "Doe", 0, 0)
+my_person.get_name()
+my_person.add_income("Salary", 200)
+my_person.add_income("Sales", 100)
+print(my_person.total_income())
