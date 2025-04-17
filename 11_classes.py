@@ -114,42 +114,61 @@ print('Variance: ', data.var()) # 18.2
 # Create a class called PersonAccount. It has firstname, lastname, incomes, expenses properties and it has total_income, total_expense, account_info, add_income, add_expense and account_balance methods. Incomes is a set of incomes and its description. The same goes for expenses.
 
 class PersonAccount:
-    def __init__(self, firstname, lastname, incomes, expenses):
+    def __init__(self, firstname, lastname):
         self.firstname = firstname
         self.lastname = lastname
         self.incomes = set()
         self.expenses = set()
         
-    def get_name (self):
-        print(f"Full name: {self.firstname} {self.lastname}")
-    
     def add_income (self, concept, amount):
+        if not isinstance(amount, (int, float)):
+            raise ValueError("Amount must be a number.")
+
         income = (concept, amount)
         self.incomes.add(income)
         print(f"New income added: {concept}")
 
     def total_income (self): 
         total_income = 0
-        for single_income in self.incomes:
-            concept, amount = single_income
-            total_income +=  amount
+        # for single_income in self.incomes:
+        #     concept, amount = single_income
+        #     total_income +=  amount
         
-        return f"Total income: {total_income}"
+        # # return f"Total income: {total_income}"
+        for _, amount in self.incomes:
+            total_income += amount
+        
+        return total_income
+
+        # generator version
+        # return sum(amount for _, amount in self.incomes)
+
     
+    def add_expense (self, concept, amount):
+        if not isinstance(amount, (int, float)):
+            raise ValueError("Amount must be a number.")
+
+        expense = (concept, amount)
+        self.expenses.add(expense)
+        print(f"New expense added: {concept}")
+
     def total_expense (self): 
-        pass
-
-    def account_info (self):
-        pass
-
-    def add_expense (self):
-        pass
+        total_expense = 0
+        for _, amount in self.expenses:
+            total_expense += amount
+        
+        return total_expense
 
     def account_balance (self):
-        pass
+        return self.total_income() - self.total_expense()
+    
+    def account_info (self):
+        return f"Full name: {self.firstname} {self.lastname}\nTotal income: {self.total_income()}\nTotal expenses: {self.total_expense()}\nAccount balance: {self.account_balance()}"
+        
 
-my_person = PersonAccount("John", "Doe", 0, 0)
-my_person.get_name()
+my_person = PersonAccount("John", "Doe")
 my_person.add_income("Salary", 200)
 my_person.add_income("Sales", 100)
-print(my_person.total_income())
+my_person.add_expense("Food", 27)
+
+print(my_person.account_info())
