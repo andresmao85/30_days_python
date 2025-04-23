@@ -86,20 +86,94 @@ def rgb_color_gen2():
     b = random.randint(0, 255)
     return f"rgb({r},{g},{b})"
 
-
 print(rgb_color_gen())
 
 
 # Exercises: Level 2
-# 1. Write a function list_of_hexa_colors which returns any number of hexadecimal colors in an array (six hexadecimal numbers written after #. Hexadecimal numeral system is made out of 16 symbols, 0-9 and first 6 letters of the alphabet, a-f. Check the task 6 for output examples).
+# 1. Write a function list_of_hexa_colors which returns any number of hexadecimal colors in an array (six hexadecimal numbers written after #. Hexadecimal numeral system is made out of 16 symbols, 0-9 and first 6 letters of the alphabet, a-f. 
+
+def list_of_hexa_colors(number_of_colors):
+    list_of_colors = []
+    for _ in range(number_of_colors):
+        color = ''.join(random.choice(string.hexdigits) for _ in range(6))
+        list_of_colors.append(color)
+    return list_of_colors
+
+# print(list_of_hexa_colors(3))
+
+# V2
+
+def list_of_hexa_colors2(number_of_colors):
+    hex_chars = '0123456789abcdef'
+    colors = []
+    for _ in range(number_of_colors):
+        color = '#' + ''.join(random.choice(hex_chars) for _ in range(6))
+        colors.append(color)
+    return colors
+
+# print(list_of_hexa_colors(3))
+
 
 # 2. Write a function list_of_rgb_colors which returns any number of RGB colors in an array.
+def list_of_rgb_colors(num):
+    colors = []
+    for _ in range(num):
+        r = random.randint(0, 255)
+        g = random.randint(0, 255)
+        b = random.randint(0, 255)
+        color = f"rgb({r},{g},{b})"
+        colors.append(color)
+    return colors
+
+# V2
+def list_of_rgbs(num):
+    return [rgb_color_gen2() for _ in range(num)]
+
+print(list_of_rgb_colors(2))
+print(list_of_rgbs(2))
 
 # 3. Write a function generate_colors which can generate any number of hexa or rgb colors.
+def generate_colors(type, amount):
+    hex_chars = '0123456789abcdef'
+    colors = []
+    if type == "hexa":
+        for _ in range(amount):
+            color = '#' + ''.join(random.choice(hex_chars) for _ in range(6))
+            colors.append(color)
+    
+    if type == "rgb":
+        for _ in range(amount):
+            r = random.randint(0, 255)
+            g = random.randint(0, 255)
+            b = random.randint(0, 255)
+            color = f"rgb({r},{g},{b})"
+            colors.append(color)
+    
+    return colors
 
+print(generate_colors('rgb', 3))
+print(generate_colors('hexa', 1))
 
 # Exercises: Level 3
 
 # 1. Call your function shuffle_list, it takes a list as a parameter and it returns a shuffled list
+# problem with this: modifies the list in place and returns None
+def shuffle_list(list):
+    return random.shuffle(list)
+
+lst = ['item1','item2','item3', 'item4', 'item5', 'item6']
+print(lst)
+
+# V2 >>> Return a new shuffled list (preferred for safety)
+def shuffle_list2(lst):
+    shuffled = lst[:]
+    random.shuffle(shuffled)
+    return shuffled
+print(shuffle_list2(lst))
+
 
 # 2. Write a function which returns an array of seven random numbers in a range of 0-9. All the numbers must be unique.
+def seven_random_numbers():
+    return random.sample(range(10), k=7)
+
+print(seven_random_numbers())
