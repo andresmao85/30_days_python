@@ -55,6 +55,49 @@ print(lines_and_words_counter("michelle_obama_speech.txt"))
 print(lines_and_words_counter("donald_speech.txt"))
 print(lines_and_words_counter("melina_trump_speech.txt"))
 
+# Read the countries_data.json data file in data directory, create a function that finds the ten most spoken languages
+'''
+# Your output should look like this
+print(most_spoken_languages(filename='./data/countries_data.json', 10))
+[(91, 'English'),
+(45, 'French'),
+(25, 'Arabic'),
+(24, 'Spanish'),
+(9, 'Russian'),
+(9, 'Portuguese'),
+(8, 'Dutch'),
+(7, 'German'),
+(5, 'Chinese'),
+(4, 'Swahili')]
+'''
+import json
+
+def ten_most_spoken_languages(filename, size):
+    # json_file = open("Ejercicios/Intermedio/data/countries_data.json", "r")
+    # languages = []
+    languages = {}
+
+    with open(filename, "r", encoding="utf-8") as json_file:
+        json_dct = json.load(json_file)
+        # print((json_dct[0]["languages"]))
+        for country in json_dct:
+            for language in country["languages"]:
+            # languages.append(country["languages"])
+                # languages.append(language)
+                if language not in languages:
+                    languages[language] = 1
+                else:
+                    languages[language] += 1
+        # yo
+        # sorted_languages = list(sorted(languages.items(), reverse= True, key= lambda item: item[1]))
+        
+        # gpt
+        sorted_languages = [(count, lang) for lang, count in sorted(languages.items(), key=lambda item: item[1], reverse=True)]
+    
+    return sorted_languages[:size]
+
+print(ten_most_spoken_languages("Ejercicios/Intermedio/data/countries_data.json", 11))
+
 
 # Read the countries_data.json data file in data directory, create a function that creates a list of the ten most populated countries
 '''
@@ -63,6 +106,3 @@ print(most_spoken_languages(filename='./data/countries_data.json', 3))
 (45, 'French'),
 (25, 'Arabic')]
 '''
-
-def get_countries_pop(data, size):
-    pass
