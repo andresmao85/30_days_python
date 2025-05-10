@@ -70,6 +70,13 @@ print(most_spoken_languages(filename='./data/countries_data.json', 10))
 (5, 'Chinese'),
 (4, 'Swahili')]
 '''
+'''
+print(most_spoken_languages(filename='./data/countries_data.json', 3))
+[(91, 'English'),
+(45, 'French'),
+(25, 'Arabic')]
+'''
+
 import json
 
 def ten_most_spoken_languages(filename, size):
@@ -84,25 +91,81 @@ def ten_most_spoken_languages(filename, size):
             for language in country["languages"]:
             # languages.append(country["languages"])
                 # languages.append(language)
-                if language not in languages:
-                    languages[language] = 1
-                else:
+                if language in languages:
                     languages[language] += 1
-        # yo
+                else:
+                    languages[language] = 1
         # sorted_languages = list(sorted(languages.items(), reverse= True, key= lambda item: item[1]))
-        
-        # gpt
         sorted_languages = [(count, lang) for lang, count in sorted(languages.items(), key=lambda item: item[1], reverse=True)]
     
     return sorted_languages[:size]
 
 print(ten_most_spoken_languages("Ejercicios/Intermedio/data/countries_data.json", 11))
 
+# V2
+from collections import Counter
 
+def ten_most_spoken_languages(filename, n):
+    with open(filename, "r", encoding="utf-8") as file:
+        countries = json.load(file)
+
+    language_counter = Counter()
+    for country in countries:
+        language_counter.update(country["languages"])
+
+    # Convert to (count, language) and return top `n`
+    return [(count, lang) for lang, count in language_counter.most_common(n)]
+
+print("\n\n***********\n\n")
+
+
+
+'''
+print(most_populated_countries(filename='./data/countries_data.json', 10))
+
+[
+{'country': 'China', 'population': 1377422166},
+{'country': 'India', 'population': 1295210000},
+{'country': 'United States of America', 'population': 323947000},
+{'country': 'Indonesia', 'population': 258705000},
+{'country': 'Brazil', 'population': 206135893},
+{'country': 'Pakistan', 'population': 194125062},
+{'country': 'Nigeria', 'population': 186988000},
+{'country': 'Bangladesh', 'population': 161006790},
+{'country': 'Russian Federation', 'population': 146599183},
+{'country': 'Japan', 'population': 126960000}
+]
+'''
 # Read the countries_data.json data file in data directory, create a function that creates a list of the ten most populated countries
 '''
-print(most_spoken_languages(filename='./data/countries_data.json', 3))
-[(91, 'English'),
-(45, 'French'),
-(25, 'Arabic')]
+print(most_populated_countries(filename='./data/countries_data.json', 3))
+[
+{'country': 'China', 'population': 1377422166},
+{'country': 'India', 'population': 1295210000},
+{'country': 'United States of America', 'population': 323947000}
+]
 '''
+def most_populated_countries(filename: str, n: int):
+    with open(filename, "r", encoding="utf-8") as file:
+        countries = json.load(file)
+
+    population_counter = []
+    for country in countries:
+        population_counter.append({"country": country["name"], "population": country["population"]})
+
+    return sorted(population_counter, key= lambda item: item["population"], reverse= True)[:n]
+
+print(most_populated_countries("Ejercicios/Intermedio/data/countries_data.json", 3))
+
+# V2
+import json
+from typing import List, Dict
+
+def most_populated_countries(filename: str, n: int = 10) -> List[Dict[str, int]]:
+    with open(filename, "r", encoding="utf-8") as file:
+        countries = json.load(file)
+
+    population_data = [{"country": country["name"], "population": country["population"]} for country in countries]
+
+    return sorted(population_data, key=lambda item: item["population"], reverse=True)[:n]
+print(most_populated_countries(filename='Ejercicios/Intermedio/data/countries_data.json', n=3))
