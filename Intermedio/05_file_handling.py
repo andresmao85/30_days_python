@@ -169,3 +169,68 @@ def most_populated_countries(filename: str, n: int = 10) -> List[Dict[str, int]]
 
     return sorted(population_data, key=lambda item: item["population"], reverse=True)[:n]
 print(most_populated_countries(filename='Ejercicios/Intermedio/data/countries_data.json', n=3))
+
+
+# Extract all incoming email addresses as a list from the email_exchange_big.txt file.
+def extract_email_addresses(filename):
+    email_addresses = []
+    with open(filename) as file:
+        lines = file.readlines()
+        email_addresses = [line[6:-1] for line in lines if line.startswith("From: ")]
+        print("Total email addresses:", len(email_addresses))
+        return email_addresses[:10]
+        
+
+print(extract_email_addresses("Ejercicios/Intermedio/data/email_exchanges_big.txt"))
+
+# V2 with re
+import re
+from typing import List
+
+def extract_email_addresses_2(filename: str) -> List[str]:
+    email_addresses = []
+
+    with open(filename, "r", encoding="utf-8") as file:
+        for line in file:
+            if line.startswith("From: "):
+                match = re.search(r'[\w\.-]+@[\w\.-]+', line)
+                if match:
+                    email_addresses.append(match.group())
+
+    print(f"Total email addresses found: {len(email_addresses)}")
+
+    # Print only the first 10 as a sample, for testing
+    print("First 10 email addresses:")
+    for email in email_addresses[:10]:
+        print(email)
+
+    return email_addresses
+extract_email_addresses_2("Ejercicios/Intermedio/data/email_exchanges_big.txt")
+
+
+# Find the most common words in the English language. Call the name of your function find_most_common_words, it will take two parameters - a string or a file and a positive integer, indicating the number of words. Your function will return an array of tuples in descending order. Check the output
+'''
+Your output should look like this
+print(find_most_common_words('sample.txt', 10))
+[(10, 'the'),
+(8, 'be'),
+(6, 'to'),
+(6, 'of'),
+(5, 'and'),
+(4, 'a'),
+(4, 'in'),
+(3, 'that'),
+(2, 'have'),
+(2, 'I')]
+'''
+
+'''
+# Your output should look like this
+print(find_most_common_words('sample.txt', 5))
+
+[(10, 'the'),
+(8, 'be'),
+(6, 'to'),
+(6, 'of'),
+(5, 'and')]
+'''
