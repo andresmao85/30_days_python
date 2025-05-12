@@ -168,7 +168,7 @@ def most_populated_countries(filename: str, n: int = 10) -> List[Dict[str, int]]
     population_data = [{"country": country["name"], "population": country["population"]} for country in countries]
 
     return sorted(population_data, key=lambda item: item["population"], reverse=True)[:n]
-print(most_populated_countries(filename='Ejercicios/Intermedio/data/countries_data.json', n=3))
+# print(most_populated_countries(filename='Ejercicios/Intermedio/data/countries_data.json', n=3))
 
 
 # Extract all incoming email addresses as a list from the email_exchange_big.txt file.
@@ -181,11 +181,11 @@ def extract_email_addresses(filename):
         return email_addresses[:10]
         
 
-print(extract_email_addresses("Ejercicios/Intermedio/data/email_exchanges_big.txt"))
+# print(extract_email_addresses("Ejercicios/Intermedio/data/email_exchanges_big.txt"))
 
 # V2 with re
 import re
-from typing import List
+from typing import List, Tuple
 
 def extract_email_addresses_2(filename: str) -> List[str]:
     email_addresses = []
@@ -205,7 +205,7 @@ def extract_email_addresses_2(filename: str) -> List[str]:
         print(email)
 
     return email_addresses
-extract_email_addresses_2("Ejercicios/Intermedio/data/email_exchanges_big.txt")
+# extract_email_addresses_2("Ejercicios/Intermedio/data/email_exchanges_big.txt")
 
 
 # Find the most common words in the English language. Call the name of your function find_most_common_words, it will take two parameters - a string or a file and a positive integer, indicating the number of words. Your function will return an array of tuples in descending order. Check the output
@@ -234,3 +234,69 @@ print(find_most_common_words('sample.txt', 5))
 (6, 'of'),
 (5, 'and')]
 '''
+
+ENGLISH_MOST_COMMON_WORDS = ['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'I']
+
+def find_most_common_words(source: str, n: int) -> List[Tuple[str, int]]:
+    file_path = f"Ejercicios/Intermedio/speeches/{source}"
+    words_count = {}
+
+    if os.path.isfile(file_path):
+        with open(file_path) as file:
+            lines = file.readlines()
+            for word in ENGLISH_MOST_COMMON_WORDS:
+                for line in lines:
+                    if word in line:
+                        if word in words_count:
+                            words_count[word] += 1
+                        else:
+                            words_count[word] = 1
+        return [(count, word) for word, count in sorted(words_count.items(), key= lambda item:item[1], reverse= True)][:n]
+    else:
+        for word in ENGLISH_MOST_COMMON_WORDS:
+            matches = re.findall(rf'\b{re.escape(word)}\b', source, re.IGNORECASE)
+            if matches:
+                words_count[word] = len(matches)
+
+    # Sort and return the top `n` most common words
+    return [(count, word) for word, count in sorted(words_count.items(), key=lambda item: item[1], reverse=True)][:n]
+
+# Error, cuenta mal las palabras
+print(find_most_common_words("test.txt", 7))
+
+# V2
+import os
+import re
+from typing import List, Tuple, Union
+
+
+def find_most_common_words(source: Union[str, os.PathLike], n: int) -> List[Tuple[str, int]]:
+    if not isinstance(n, int) or n <= 0:
+        raise ValueError("The number of words to return (n) must be a positive integer.")
+
+    words_count = {}
+
+    if os.path.isfile(source):
+        try:
+            with open(source, "r", encoding="utf-8") as file:
+                content = file.read()
+        except FileNotFoundError:
+            raise FileNotFoundError(f"The file '{source}' does not exist.")
+    else:
+        content = source
+
+    for word in ENGLISH_MOST_COMMON_WORDS:
+        matches = re.findall(rf'\b{re.escape(word)}\b', content, re.IGNORECASE)
+        if matches:
+            words_count[word] = len(matches)
+
+    # Sort the words by frequency in descending order and return the top `n`
+    sorted_words = sorted(words_count.items(), key=lambda item: item[1], reverse=True)
+    return [(count, word) for word, count in sorted_words[:n]]
+
+# Example usage
+print(find_most_common_words("Ejercicios/Intermedio/speeches/test.txt", 7))
+
+    # Test with a string
+sample_text = ("So far we have seen different Python data types. We usually store our data in different file formats. In addition to handling files, we will also see different file formats(.txt, .json, .xml, .csv, .tsv, .excel) in this section. First, let us get familiar with handling files with common file format(.txt). File handling is an import part of programming which allows us to create, read, update and delete files. In Python to handle data we use open() built-in function.")
+print(find_most_common_words(sample_text, 7))
