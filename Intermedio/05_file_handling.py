@@ -269,7 +269,6 @@ import os
 import re
 from typing import List, Tuple, Union
 
-
 def find_most_common_words(source: Union[str, os.PathLike], n: int) -> List[Tuple[str, int]]:
     if not isinstance(n, int) or n <= 0:
         raise ValueError("The number of words to return (n) must be a positive integer.")
@@ -300,3 +299,230 @@ print(find_most_common_words("Ejercicios/Intermedio/speeches/test.txt", 7))
     # Test with a string
 sample_text = ("So far we have seen different Python data types. We usually store our data in different file formats. In addition to handling files, we will also see different file formats(.txt, .json, .xml, .csv, .tsv, .excel) in this section. First, let us get familiar with handling files with common file format(.txt). File handling is an import part of programming which allows us to create, read, update and delete files. In Python to handle data we use open() built-in function.")
 print(find_most_common_words(sample_text, 7))
+
+'''
+Create the function, find_most_frequent_words to find: 
+a) The ten most frequent words used in Obama's speech 
+b) The ten most frequent words used in Michelle's speech 
+c) The ten most frequent words used in Trump's speech 
+d) The ten most frequent words used in Melina's speech
+'''
+def find_most_frequent_words(filename):
+    file_path = os.path.join("Ejercicios", "Intermedio", "speeches", filename)
+    
+    words_count = {}
+    
+    with open(file_path,"r", encoding="utf-8") as file:
+        for line in file:
+            words = re.findall(r'\b\w+\b', line)
+            for word in words:
+                if word in words_count:
+                    words_count[word] += 1
+                else:
+                    words_count[word] = 1
+    sorted_words = sorted(words_count.items(), key=lambda item:item[1], reverse=True)
+
+    return [(count, word) for word, count in sorted_words[:10]]
+#  Flaw: sensitive case, counts lower and upper case apart
+# print("Obama:", find_most_frequent_words("obama_speech.txt"))
+# print("Michelle:", find_most_frequent_words("michelle_obama_speech.txt"))
+# print("Donald:", find_most_frequent_words("donald_speech.txt"))
+# print("Melina", find_most_frequent_words("melina_trump_speech.txt"))
+
+# V2 improved
+def find_most_frequent_words_2(filename):
+    file_path = os.path.join("Ejercicios", "Intermedio", "speeches", filename)
+    
+    word_counts = {}
+    
+    with open(file_path, "r", encoding="utf-8") as file:
+        for line in file:
+            words = re.findall(r'\b\w+\b', line.lower())  
+            for word in words:
+                word_counts[word] = word_counts.get(word, 0) + 1
+    
+    sorted_words = sorted(word_counts.items(), key=lambda item: item[1], reverse=True)
+    return [(word, count) for word, count in sorted_words[:10]] 
+
+print("Obama:", find_most_frequent_words_2("obama_speech.txt"))
+print("Michelle:", find_most_frequent_words_2("michelle_obama_speech.txt"))
+print("Donald:", find_most_frequent_words_2("donald_speech.txt"))
+print("Melina", find_most_frequent_words_2("melina_trump_speech.txt"))
+
+# V3 GPT
+import os
+import re
+from typing import List, Tuple
+from collections import Counter
+
+def find_most_frequent_words_3(filename: str, n: int = 10) -> List[Tuple[str, int]]:
+    file_path = os.path.join("Ejercicios", "Intermedio", "speeches", filename)
+
+    with open(file_path, "r", encoding="utf-8") as file:
+        text = file.read().lower()
+        words = re.findall(r'\b\w+\b', text)
+
+    word_counts = Counter(words)
+    most_common = word_counts.most_common(n)
+
+    return most_common
+
+print("Obama:", find_most_frequent_words_3("obama_speech.txt"))
+print("Michelle:", find_most_frequent_words_3("michelle_obama_speech.txt"))
+print("Donald:", find_most_frequent_words_3("donald_speech.txt"))
+print("Melina", find_most_frequent_words_3("melina_trump_speech.txt"))
+
+
+# Write a python application that checks similarity between two texts. It takes a file or a string as a parameter and it will evaluate the similarity of the two texts. For instance check the similarity between the transcripts of Michelle's and Melina's speech. You may need a couple of functions, function to clean the text (clean_text), function to remove support words(remove_support_words) and finally to check the similarity(check_text_similarity). List of stop words are in the data directory.
+import stop_words, string
+CHARS = string.punctuation
+STOP_WORDS = stop_words.stop_words
+
+# def clean_string_text(text):
+#     words = re.findall(r'\b\w+\b', text)
+#     return " ".join(words).lower()
+    
+# # print(clean_string_text("This is your day.This is your celebration.And this – the United States of America – is your country.What truly matters is not what party controls our government but that this government is controlled by the people."))
+
+# def clean_file_text(filename):
+#     file_path = os.path.join("Ejercicios", "Intermedio", "speeches", filename)
+
+#     with open(file_path, "r", encoding="utf-8") as file:
+#         text = file.read().lower()
+#         words = re.findall(r'\b\w+\b', text)
+
+#     return " ".join(words)
+
+# print(clean_file_text("donald_speech.txt"))
+
+def clean_text(source):
+    if os.path.isfile(source):
+        try:
+            with open(source, "r", encoding="utf-8") as file:
+                content = file.read().lower()
+        except FileNotFoundError:
+            raise FileNotFoundError("The file does not exist")
+    else:
+        content = source.lower()
+    
+    words = re.findall(r'\b\w+\b', content)
+    return " ".join(words)
+
+# print(clean_text("This is your day.This is your celebration.And this – the United States of America – is your country.What truly matters is not what party controls our government but that this government is controlled by the people."))
+
+# print(clean_text("Ejercicios/Intermedio/speeches/donald_speech.txt"))
+
+
+def remove_support_words(source):
+    cleaned_text = clean_text(source)
+    new_text = " ".join([word for word in cleaned_text.split() if word not in STOP_WORDS])
+    return new_text
+        
+# print(remove_support_words("This is your day.This is your celebration.And this – the United States of America – is your country.What truly matters is not what party controls our government but that this government is controlled by the people."))
+
+# print(remove_support_words("Ejercicios/Intermedio/speeches/donald_speech.txt"))
+
+'''
+Jaccard index, also known as Jaccard similarity coefficient,  treats the data objects like sets. It is defined as the size of the intersection of two sets divided by the size of the union. Let’s continue with our previous example:
+
+def jaccard_similarity(x,y):
+    """ returns the jaccard similarity between two lists """
+    intersection_cardinality = len(set.intersection(*[set(x), set(y)]))
+    union_cardinality = len(set.union(*[set(x), set(y)]))
+    return intersection_cardinality/float(union_cardinality)
+    
+https://www.newscatcherapi.com/blog/ultimate-guide-to-text-similarity-with-python
+'''
+
+
+def check_text_similarity_jaccard(source_a, source_b):
+#   returns the jaccard similarity between two lists """
+    text_a = remove_support_words(source_a)
+    text_b = remove_support_words(source_b)
+
+    intersection_cardinality = len(set.intersection(*[set(text_a), set(text_b)])) 
+    union_cardinality = len(set.union(*[set(text_a), set(text_b)]))
+    return intersection_cardinality/float(union_cardinality)
+    
+
+print(check_text_similarity_jaccard("Ejercicios/Intermedio/speeches/melina_trump_speech.txt", "Ejercicios/Intermedio/speeches/michelle_obama_speech.txt"))
+
+
+# **************************************************************
+
+# Write a python application that checks similarity between two texts. It takes a file or a string as a parameter and it will evaluate the similarity of the two texts. For instance check the similarity between the transcripts of Michelle's and Melina's speech. You may need a couple of functions, function to clean the text (clean_text), function to remove support words(remove_support_words) and finally to check the similarity(check_text_similarity). List of stop words are in the data directory.
+import stop_words, string
+STOP_WORDS = stop_words.stop_words
+
+def clean_text(source):
+    if os.path.isfile(source):
+        try:
+            with open(source, "r", encoding="utf-8") as file:
+                content = file.read().lower()
+        except FileNotFoundError:
+            raise FileNotFoundError("The file does not exist")
+    else:
+        content = source.lower()
+    
+    words = re.findall(r'\b\w+\b', content)
+    return " ".join(words)
+
+def remove_support_words(source):
+    cleaned_text = clean_text(source)
+    new_text = " ".join([word for word in cleaned_text.split() if word not in STOP_WORDS])
+    return new_text
+        
+def check_text_similarity_jaccard(source_a, source_b):
+    text_a = remove_support_words(source_a)
+    text_b = remove_support_words(source_b)
+
+    intersection_cardinality = len(set.intersection(*[set(text_a), set(text_b)])) # Flaw: this builds a set of characters, not words.
+    # union_cardinality = len(set.union(*[set(text_a), set(text_b)])) # original
+    union_cardinality = len(set.union(*[set(text_a.split()), set(text_b.split())])) 
+    
+    return intersection_cardinality/float(union_cardinality)
+    
+# V2
+import os
+import re
+from typing import Union
+import stop_words
+STOP_WORDS = stop_words.stop_words
+
+
+def clean_text(source: Union[str, os.PathLike]) -> str:
+    if os.path.isfile(source):
+        try:
+            with open(source, "r", encoding="utf-8") as file:
+                content = file.read().lower()
+        except Exception as e:
+            raise RuntimeError(f"Error reading file '{source}': {e}")
+    else:
+        content = source.lower()
+
+    words = re.findall(r'\b\w+\b', content)
+    return " ".join(words)
+
+
+def remove_stop_words(source: Union[str, os.PathLike]) -> str:
+    cleaned_text = clean_text(source)
+    filtered_words = [word for word in cleaned_text.split() if word not in STOP_WORDS]
+    return " ".join(filtered_words)
+
+
+def check_text_similarity_jaccard(source_a: Union[str, os.PathLike], source_b: Union[str, os.PathLike]) -> float:
+    text_a = remove_stop_words(source_a).split()
+    text_b = remove_stop_words(source_b).split()
+
+    set_a = set(text_a)
+    set_b = set(text_b)
+
+    intersection = set_a & set_b
+    union = set_a | set_b
+
+    if not union:
+        return 0.0  # Avoid division by zero
+
+    return len(intersection) / len(union)
+
+print(check_text_similarity_jaccard("Ejercicios/Intermedio/speeches/melina_trump_speech.txt", "Ejercicios/Intermedio/speeches/michelle_obama_speech.txt"))

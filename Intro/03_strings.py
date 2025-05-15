@@ -50,6 +50,7 @@ text = "Python For Everyone"
 print(text.replace("Everyone", "All"))
 
 # Split the string 'Coding For All' using space as the separator (split()) .
+print("Hoy")
 print("Coding for all".split(" "))
 
 # "Facebook, Google, Microsoft, Apple, IBM, Oracle, Amazon" split the string at the comma.
