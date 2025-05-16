@@ -526,3 +526,43 @@ def check_text_similarity_jaccard(source_a: Union[str, os.PathLike], source_b: U
     return len(intersection) / len(union)
 
 print(check_text_similarity_jaccard("Ejercicios/Intermedio/speeches/melina_trump_speech.txt", "Ejercicios/Intermedio/speeches/michelle_obama_speech.txt"))
+
+
+# Find the 10 most repeated words in the romeo_and_juliet.txt
+print(find_most_common_words("Ejercicios/Intermedio/data/romeo_and_juliet.txt", 10))
+
+# Read the hacker news csv file and find out: 
+# a) Count the number of lines containing python or Python 
+# b) Count the number lines containing JavaScript, javascript or Javascript 
+# c) Count the number lines containing Java and not JavaScript
+
+# a)
+def count_python(file_name):
+    python_count = 0
+    with open(file_name, "r") as file:
+        for row in file.readlines():
+            if "python" in row.lower():
+                python_count += 1
+    return python_count
+
+
+# V2 GPT
+
+import csv
+def count_python(file_name: str, word_to_count:str) -> int:
+    python_count = 0
+
+    with open(file_name, mode="r", encoding="utf-8") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            line_text = " ".join(row).lower()
+            words = re.findall(r'\b\w+\b', line_text)
+            for word in words:
+                if word == word_to_count:
+                    python_count += 1
+    
+    return python_count
+print(count_python("Ejercicios/Intermedio/data/hacker_news.csv", "python"))
+print(count_python("Ejercicios/Intermedio/data/hacker_news.csv", "javascript"))
+print(count_python("Ejercicios/Intermedio/data/hacker_news.csv", "java"))
+
