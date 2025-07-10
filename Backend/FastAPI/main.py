@@ -23,3 +23,11 @@ http://127.0.0.1:8000/docs
 http://127.0.0.1:8000/redoc
 '''
 
+### ROUTERS
+
+from routers import products, users
+from fastapi.staticfiles import StaticFiles
+
+app.include_router(products.router)
+app.include_router(users.router)
+app.mount("/aqui", StaticFiles(directory="static"), name="static") # donde se quiere exponer: /lo que sea (ejm static)

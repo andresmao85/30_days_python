@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, APIRouter
 from pydantic import BaseModel
 
-app = FastAPI()
+# app = FastAPI() # con app, independiente
+# con router
+router = APIRouter()
 
 
 # para correr servidor:
@@ -14,7 +16,8 @@ app = FastAPI()
 # (HARD CODED, no OOP)
 
 
-@app.get("/usersjson") 
+# @app.get("/usersjson") 
+@router.get("/usersjson") 
 async def usersjson():
     # return "¡Hola Users!"
     return [
@@ -39,7 +42,8 @@ async def usersjson():
 #     User(name= "Mauro", surname= "Arias", url= "www.maurodev.com", age= 39),
 #     User(name= "Juan", surname= "Perez", url= "www.juanperez.com", age= 24)]
 
-@app.get("/users") 
+# @app.get("/users") 
+@router.get("/users") 
 async def users():
     return users_list
 
@@ -58,7 +62,8 @@ users_list = [
 
 # en thunder client, se hace la prueba a la API con:
 # http://127.0.0.1:8000/user/1
-@app.get("/user/{id}") # esto no quiere decir q vamos a llamar a users/id, 
+# @app.get("/user/{id}") # esto no quiere decir q vamos a llamar a users/id, 
+@router.get("/user/{id}") 
 async def user(id: int):
     users = filter(lambda user: user.id == id, users_list)
     return search_user(id)
@@ -67,7 +72,8 @@ async def user(id: int):
 # Consulta por QUERY
 # en thunder client, se hace la prueba con:
 # http://127.0.0.1:8000/userquery/?id=1
-@app.get("/user/") 
+# @app.get("/user/") 
+@router.get("/user/") 
 async def user(id: int):
     return search_user(id)
     
@@ -93,16 +99,22 @@ QUERY > el parámetro puede ir o no ir (opcional)'''
 # MONTAR OPERACIÓN PARA AÑADIR USUARIOS
 # En thunder client, para usar la operación POST; se selecciona la tab "Body", y la url de user:
 # http://127.0.0.1:8000/user/
-@app.post("/user/")
+# @app.post("/user/") # sin status http
+# @app.post("/user/", status_code=201) # con status http
+# @app.post("/user/", response_model=User, status_code=201) # con status http y response model
+@router.post("/user/", response_model=User, status_code=201) 
 async def user(user: User):
     if type(search_user(user.id)) == User:
-        return {"error": "El uuario ya existe"}
-    else:
-        users_list.append(user)
-        return user
+        # return {"error": "El uuario ya existe"} # sin HTTPException
+        raise HTTPException(status_code=404, detail="El usuario ya existe")
+        
+    
+    users_list.append(user)
+    return user
 
 # Actualizar objeto: PUT -actualiza el usuario completo (para parte concreta del objeto se utilizaría PATCH, pero no se verá en este curso, investigar)
-@app.put("/user/")
+# @app.put("/user/")
+@router.put("/user/")
 async def user(user: User):
 
     found = False
@@ -119,7 +131,8 @@ async def user(user: User):
 
 
 # Eliminar objeto: DELETE
-@app.delete("/user/{id}")
+# @app.delete("/user/{id}")
+@router.delete("/user/{id}")
 async def user(id: int):
 
     found = False
