@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+# from fastapi import FastAPI, Depends, HTTPException, status # sin routers
+from fastapi import APIRouter, Depends, HTTPException, status # con routers
 from pydantic import BaseModel
 # Importar módulo de autenticación
 # bearer > se encarga de gestionar autenticación, usuario y contraseña
@@ -6,7 +7,8 @@ from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 
-app = FastAPI()
+# app = FastAPI() # sin router
+router = APIRouter() # con router
 
 # Instancia del sistema de autenticación
 oauth2 = OAuth2PasswordBearer(tokenUrl="login")
@@ -25,18 +27,18 @@ class UserDB(User):
 
 users_db = {
     "mauro": {
-        "username": "Mauro",
+        "username": "mauro",
         "full_name": "Andres Mauro",
         "email": "mauro@gmail.com",
         "disabled": False,
-        "password": "12345"
+        "password": "123456"
     },
     "morris": {
-        "username": "Morris",
+        "username": "morris",
         "full_name": "Andrew Morris",
         "email": "morris@gmail.com",
         "disabled": True,
-        "password": "54321"
+        "password": "654321"
     }
 }
 
@@ -69,7 +71,7 @@ async def current_user(token: str = Depends(oauth2)):
 # operación > voy a obtener datos pero gracias a q se envían datos, en concreto, usuario y contra, por lo cual se usa post
 
 # Depends > la operación va a recibir datos pero no depende de nada
-@app.post("/login")
+@router.post("/login")
 async def login(form: OAuth2PasswordRequestForm = Depends()):
     user_db = users_db.get(form.username)
     if not user_db:
@@ -85,7 +87,7 @@ async def login(form: OAuth2PasswordRequestForm = Depends()):
 # Ya autenticado, obtener datos de usuarios
 # criterios de dependencia > depende de q el usuario esté autenticado. Podemos implementar operaciones q validen la op
 # ver criterio de dependencia definido arriba
-@app.get("/users/me")
+@router.get("/users/me")
 async def me(user: User = Depends(current_user)):
     return user
 

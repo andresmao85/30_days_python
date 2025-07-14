@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, APIRouter
+from fastapi import HTTPException, APIRouter
 from pydantic import BaseModel
 
 # app = FastAPI() # con app, independiente
