@@ -25,7 +25,7 @@ http://127.0.0.1:8000/redoc
 
 ### ROUTERS
 
-from routers import products, users, basic_auth_users, jwt_auth_users
+from routers import products, users, basic_auth_users, jwt_auth_users, users_db
 from fastapi.staticfiles import StaticFiles
 
 app.include_router(products.router)
@@ -33,5 +33,7 @@ app.include_router(users.router)
 
 app.include_router(basic_auth_users.router)
 app.include_router(jwt_auth_users.router)
+
+app.include_router(users_db.router)
 
 app.mount("/aqui", StaticFiles(directory="static"), name="static") # donde se quiere exponer: /lo que sea (ejm static)

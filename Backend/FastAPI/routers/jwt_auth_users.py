@@ -12,7 +12,14 @@ ACCESS_TOKEN_DURATION = 1
 # ejecutar este código en bash:
 # openssl rand -hex 32
 SECRET = "23cf9708080157dddc1673c5895373bcf36e42dc2406c08a40c8a1693ee40c0f"
-router = APIRouter()
+
+# router = APIRouter()
+router = APIRouter(
+    prefix="/jwtauth", 
+    tags=["jwtauth"],
+    responses={status.HTTP_404_NOT_FOUND: {"message": "No encontrado"}},
+    )
+
 oauth2 = OAuth2PasswordBearer(tokenUrl="login")
 
 # Definit contexto de encriptación

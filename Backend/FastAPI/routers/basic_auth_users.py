@@ -8,7 +8,12 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 
 # app = FastAPI() # sin router
-router = APIRouter() # con router
+# router = APIRouter() # con router
+router = APIRouter(
+    prefix="/basicauth", 
+    tags=["basicauth"],
+    responses={status.HTTP_404_NOT_FOUND: {"message": "No encontrado"}},
+    )
 
 # Instancia del sistema de autenticación
 oauth2 = OAuth2PasswordBearer(tokenUrl="login")
