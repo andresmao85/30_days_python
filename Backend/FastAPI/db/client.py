@@ -9,4 +9,4 @@ from pymongo import MongoClient
 # db_client = MongoClient().local
 
 # Base de datos remota
-db_client = MongoClient("mongodb+srv://test1:test1@cluster0.zvqlifs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").test1
+# db_client = MongoClient("mongodb+srv://test:test@cluster0.zvqlifs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").test
